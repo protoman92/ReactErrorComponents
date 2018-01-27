@@ -1,5 +1,5 @@
 {
-  "name": "react-error-components",
+  "name": "react-error-display-components",
   "version": "1.0.0",
   "description": "MVVM-based error components for React applications.",
   "main": "./dist/src/index.js",
