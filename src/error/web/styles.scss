@@ -1,0 +1,25 @@
+$transition-duration: 300ms;
+
+.error-display {
+  align-items: center;
+  background: darkgrey;
+  border-radius: 0.3vw;
+  color: white;
+  display: flex;
+  height: 3vw;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5vw;
+  opacity: 1;
+  padding: 1.5vw;
+  visibility: visible;
+  -webkit-transition: $transition-duration;
+  -moz-transition: $transition-duration;
+  -o-transition: $transition-duration;
+  transition: $transition-duration;
+}
+
+.error-display-hidden {
+  opacity: 0;
+  visibility: hidden;
+}
