@@ -1,8 +1,8 @@
 import { Observer, Observable, Subscription } from 'rxjs';
 import { Nullable, Try } from 'javascriptutilities';
-import { State as S } from 'typesafereduxstate-js';
-import { ReduxStore } from 'reactiveredux-js';
-import { MVVM } from 'reactutilities-js';
+import { State as S } from 'type-safe-state-js';
+import { ReduxStore } from 'reactive-rx-redux-js';
+import { MVVM } from 'react-base-utilities-js';
 
 export namespace Action {
   /**

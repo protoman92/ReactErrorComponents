@@ -1,5 +1,5 @@
 {
-  "name": "reacterrorcomponents",
+  "name": "react-error-components",
   "version": "1.0.0",
   "description": "MVVM-based error components for React applications.",
   "main": "./dist/src/index.js",
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/protoman92/ReactErrorComponents#readme",
   "dependencies": {
-    "reactutilities-js": "^1.0.1"
+    "react-base-utilities-js": "^1.0.1"
   },
   "devDependencies": {
     "@types/enzyme": "^3.1.8",

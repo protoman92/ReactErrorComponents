@@ -1,7 +1,7 @@
 import { Observable, Subscription } from 'rxjs'; 
 import { Numbers } from 'javascriptutilities';
 import { Strings } from 'javascriptutilities/dist/src/string';
-import { ReduxStore } from 'reactiveredux-js';
+import { ReduxStore } from 'reactive-rx-redux-js';
 import { ErrorDisplay } from './../src';
 
 let timeout = 1000;

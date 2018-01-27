@@ -1,5 +1,5 @@
 import { Try } from 'javascriptutilities';
-import { Component } from 'reactutilities-js';
+import { Component } from 'react-base-utilities-js';
 
 export namespace Identity {
   /**

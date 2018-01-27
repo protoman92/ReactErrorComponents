@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs';
 import * as React from 'react';
 import { Component, ReactNode } from 'react';
 import { Try } from 'javascriptutilities';
-import { State } from 'typesafereduxstate-js';
+import { State } from 'type-safe-state-js';
 import { ViewModel } from './../dependency/base';
 import { Identity } from './Dependency';
 
