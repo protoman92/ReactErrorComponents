@@ -83,9 +83,9 @@ export namespace Provider {
 export namespace Model {
   /**
    * Dispatch store-based model.
-   * @extends {Base.Model.Type} Base model extension.
+   * @extends {Base.Model.DisplayType} Base model extension.
    */
-  export interface Type extends Base.Model.Type {}
+  export interface Type extends Base.Model.DisplayType {}
 
   /**
    * Dispatch store-based model.
@@ -93,7 +93,7 @@ export namespace Model {
    */
   export class Self implements Type {
     private readonly provider: Provider.Type;
-    private readonly baseModel: Base.Model.Type;
+    private readonly baseModel: Base.Model.DisplayType;
 
     public get substatePath(): Readonly<string> {
       return this.baseModel.substatePath;

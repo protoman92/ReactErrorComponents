@@ -50,13 +50,32 @@ export namespace Provider {
 
 export namespace Model {
   /**
-   * Base model for an error view model. This model provides functionalities
-   * for both dispatch store- and rx store-based models.
+   * Base model for an error view model. This model type only exposes minimal
+   * functionalities so it can be implemented by other components' models.
    */
   export interface Type {
-    substatePath: Readonly<string>;
     operationErrorTrigger(): Observer<Nullable<Error>>;
     operationErrorStream(): Observable<Try<Error>>;
+  }
+
+  /**
+   * Base display model for an error view model. This model should be to used if
+   * we are using a standable error display component.
+   *
+   * The reason we have a separation between the base type and this type is that
+   * we allow other components' models (which are interested in listening to
+   * errors) to implement the base type - so that they are not required to
+   * provide unnecessary functionalities.
+   *
+   * For those models, we initialize an error display model as an instance
+   * property - this error display model should know how to access the error
+   * stream/trigger. The owning models will then implement the base model type
+   * methods by delegating to the error model.
+   *
+   * @extends {Type} Type extension.
+   */
+  export interface DisplayType extends Type {
+    substatePath: Readonly<string>;
     errorForState(state: Readonly<Nullable<StateType<any>>>): Try<Error>;
   }
 
@@ -69,9 +88,9 @@ export namespace Model {
 
   /**
    * Base model for an error view model.
-   * @implements {Type} Type implementation.
+   * @implements {DisplayType} Type implementation.
    */
-  export class Self implements Type {
+  export class Self implements DisplayType {
     private provider: Provider.Type;
 
     private get fullErrorValuePath(): string {
@@ -167,14 +186,14 @@ export namespace ViewModel {
    */
   export class Self implements DisplayType {
     private readonly provider: Provider.Type;
-    private readonly model: Model.Type;
+    private readonly model: Model.DisplayType;
     private readonly subscription: Subscription;
 
     public get screen(): Nullable<MVVM.Navigation.Screen.BaseType> {
       return undefined;
     }
 
-    public constructor(provider: Provider.Type, model: Model.Type) {
+    public constructor(provider: Provider.Type, model: Model.DisplayType) {
       this.provider = provider;
       this.model = model;
       this.subscription = new Subscription();

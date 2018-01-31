@@ -6,7 +6,7 @@ import { ErrorDisplay } from './../src';
 
 let timeout = 1000;
 let constants: ErrorDisplay.Base.Constants.Type = { displayDuration: 0 };
-type Model = ErrorDisplay.Base.Model.Type;
+type Model = ErrorDisplay.Base.Model.DisplayType;
 type Provider = ErrorDisplay.Base.Provider.Type;
 
 describe('Error view model should be implemented correctly', () => {
