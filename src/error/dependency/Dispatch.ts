@@ -76,7 +76,7 @@ export namespace Provider {
    */
   export interface Type extends Base.Provider.Type {
     action: Action.ProviderType;
-    store: Store.Dispatch.Self;
+    store: Store.Dispatch.Type;
   }
 }
 
