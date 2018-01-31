@@ -1,9 +1,8 @@
-import { Observable, Observer, Subscription } from 'rxjs';
+import { Observable, Observer } from 'rxjs';
 import { Nullable, Try } from 'javascriptutilities';
 import { State as S } from 'type-safe-state-js';
 import { DispatchReducer, ReduxStore as Store } from 'reactive-rx-redux-js';
-import { MVVM } from 'react-base-utilities-js';
-import * as Base from './base';
+import * as Base from './../base';
 
 export namespace Action {
   export let UPDATE_ERROR_ACTION = 'UPDATE_ERROR_ACTION';
@@ -26,7 +25,7 @@ export namespace Action {
   /**
    * Create default error action creator.
    */
-  export let createDefault = (): CreatorType => {  
+  export let createDefault = (): CreatorType => {
     let fullErrorValuePath = 'error.value';
 
     return {
@@ -81,48 +80,28 @@ export namespace Provider {
   }
 }
 
-export namespace ViewModel {
+export namespace Model {
   /**
-   * Dispatch store-based view model.
-   * @extends {Base.ViewModel.DisplayType} Base view model extension.
+   * Dispatch store-based model.
+   * @extends {Base.Model.Type} Base model extension.
    */
-  export interface Type extends Base.ViewModel.DisplayType {}
+  export interface Type extends Base.Model.Type {}
 
   /**
-   * Use this class to handle operation errors.
+   * Dispatch store-based model.
    * @implements {Type} Type implementation.
    */
   export class Self implements Type {
     private readonly provider: Provider.Type;
-    private readonly subscription: Subscription;
-    private readonly baseVM: Base.ViewModel.DisplayType;
+    private readonly baseModel: Base.Model.Type;
 
-    public get screen(): Nullable<MVVM.Navigation.Screen.Type> {
-      return this.baseVM.screen;
+    public get substatePath(): Readonly<string> {
+      return this.baseModel.substatePath;
     }
 
     public constructor(provider: Provider.Type) {
       this.provider = provider;
-      this.subscription = new Subscription();
-      this.baseVM = new Base.ViewModel.Self(provider);
-    }
-
-    public initialize = (): void => {
-      let params: Base.ViewModel.InitializableParamsType = {
-        provider: this.provider,
-        viewModel: this,
-        subscription: this.subscription,
-      };
-
-      Base.ViewModel.initialize(params);
-    }
-
-    public deinitialize = (): void => {
-      this.subscription.unsubscribe();
-    }
-
-    public stateStream = (): Observable<Try<S.Self<any>>> => {
-      return this.baseVM.stateStream();
+      this.baseModel = new Base.Model.Self(provider);
     }
 
     public operationErrorTrigger = (): Observer<Nullable<Error>> => {
@@ -131,11 +110,11 @@ export namespace ViewModel {
     }
 
     public operationErrorStream = (): Observable<Try<Error>> => {
-      return this.baseVM.operationErrorStream();
+      return this.baseModel.operationErrorStream();
     }
 
     public errorForState = (state: Readonly<Nullable<S.Self<any>>>): Try<Error> => {
-      return this.baseVM.errorForState(state);
+      return this.baseModel.errorForState(state);
     }
   }
 }

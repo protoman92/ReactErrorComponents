@@ -2,8 +2,8 @@ import { Subscription } from 'rxjs';
 import * as React from 'react';
 import { Component, ReactNode } from 'react';
 import { Try } from 'javascriptutilities';
-import { State } from 'type-safe-state-js';
-import { ViewModel } from './../dependency/base';
+import { StateType } from 'type-safe-state-js';
+import * as Base from './../base';
 import { Identity } from './Dependency';
 
 export namespace Props {
@@ -12,7 +12,7 @@ export namespace Props {
    */
   export interface Type {
     identity?: Identity.ProviderType;
-    viewModel: ViewModel.DisplayType;
+    viewModel: Base.ViewModel.DisplayType;
 
     /**
      * If we do not want to default error display component, we can manually
@@ -26,10 +26,10 @@ export namespace Props {
 
 /**
  * Error display component.
- * @extends {Component<Props.Type,State.Self<any>>} Component extension.
+ * @extends {Component<Props.Type, StateType<any>>} Component extension.
  */
-export class Self extends Component<Props.Type,State.Self<any>> {
-  private readonly viewModel: ViewModel.DisplayType;
+export class Self extends Component<Props.Type, StateType<any>> {
+  private readonly viewModel: Base.ViewModel.DisplayType;
   private readonly subscription: Subscription;
 
   public constructor(props: Props.Type) {
@@ -72,7 +72,7 @@ export class Self extends Component<Props.Type,State.Self<any>> {
     let identity = Try.unwrap(props.identity)
       .flatMap(v => Try.unwrap(v.error))
       .getOrElse(() => Identity.createDefaultSelector());
-    
+
     return <div {...identity.containerIdentity(enabled).value}>
       <div {...identity.identity(enabled).value}>
         {this.createDisplayComponent(error)}

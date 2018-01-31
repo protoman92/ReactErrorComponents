@@ -33,11 +33,7 @@
       "esnext.asynciterable"
     ],
 
-    "types": [
-      "react",
-      "react-native",
-      "jest"
-    ],
+    "types": ["react", "jest"],
   },
   "compileOnSave": true
 }

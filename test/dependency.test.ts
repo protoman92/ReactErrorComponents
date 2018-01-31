@@ -1,4 +1,4 @@
-import { Observable, Subscription } from 'rxjs'; 
+import { Observable, Subscription } from 'rxjs';
 import { Numbers } from 'javascriptutilities';
 import { Strings } from 'javascriptutilities/dist/src/string';
 import { ReduxStore } from 'reactive-rx-redux-js';
@@ -6,15 +6,16 @@ import { ErrorDisplay } from './../src';
 
 let timeout = 1000;
 let constants: ErrorDisplay.Base.Constants.Type = { displayDuration: 0 };
-type ViewModel = ErrorDisplay.Base.ViewModel.DisplayType;
+type Model = ErrorDisplay.Base.Model.Type;
+type Provider = ErrorDisplay.Base.Provider.Type;
 
 describe('Error view model should be implemented correctly', () => {
-  var dispatchStore: ReduxStore.Dispatch.Self;
-  var rxStore: ReduxStore.Rx.Self;
-  var dispatchProvider: ErrorDisplay.Dispatch.Provider.Type;
-  var rxProvider: ErrorDisplay.Rx.Provider.Type;
-  var dispatchVM: ErrorDisplay.Dispatch.ViewModel.Type;
-  var rxVM: ErrorDisplay.Rx.ViewModel.Type;
+  let dispatchStore: ReduxStore.Dispatch.Self;
+  let rxStore: ReduxStore.Rx.Self;
+  let dispatchProvider: ErrorDisplay.Dispatch.Provider.Type;
+  let rxProvider: ErrorDisplay.Rx.Provider.Type;
+  let dispatchModel: ErrorDisplay.Dispatch.Model.Type;
+  let rxModel: ErrorDisplay.Rx.Model.Type;
 
   beforeEach(() => {
     let rxAction = ErrorDisplay.Rx.Action.createDefault();
@@ -39,18 +40,19 @@ describe('Error view model should be implemented correctly', () => {
     };
 
     dispatchStore.initialize(dispatchReducer);
-    dispatchVM = new ErrorDisplay.Dispatch.ViewModel.Self(dispatchProvider);
-    rxVM = new ErrorDisplay.Rx.ViewModel.Self(rxProvider);
+    dispatchModel = new ErrorDisplay.Dispatch.Model.Self(dispatchProvider);
+    rxModel = new ErrorDisplay.Rx.Model.Self(rxProvider);
   });
 
-  let testErrorViewModel = (viewModel: ViewModel, done: Function) => {
+  let testErrorViewModel = (provider: Provider, model: Model, done: Function) => {
     /// Setup
     let waitTime = 0.1;
     let times = 100;
     let errors = Numbers.range(0, times).map(() => new Error(Strings.randomString(10)));
+    let viewModel = new ErrorDisplay.Base.ViewModel.Self(provider, model);
     let trigger = viewModel.operationErrorTrigger();
-    var nullables: undefined[] = [];
-    var errorResults: Error[] = [];
+    let nullables: undefined[] = [];
+    let errorResults: Error[] = [];
 
     viewModel.operationErrorStream()
       .doOnNext(v => v.value === undefined ? nullables.push(undefined) : {})
@@ -60,7 +62,7 @@ describe('Error view model should be implemented correctly', () => {
 
     // Also need to test that the view model automatically deletes the error
     // from global stream.
-    viewModel.initialize();
+    viewModel.initializeErrorDeletionStream();
 
     /// When
     Observable.from(errors)
@@ -76,14 +78,15 @@ describe('Error view model should be implemented correctly', () => {
       .subscribe();
   };
 
-  let testErrorDisplayable = (viewModel: ViewModel, done: Function) => {
+  let testErrorDisplayable = (provider: Provider, model: Model, done: Function): void => {
     /// Setup
     let waitTime = 0.1;
     let times = 100;
     let errors = Numbers.range(0, times).map(() => new Error(Strings.randomString(10)));
+    let viewModel = new ErrorDisplay.Base.ViewModel.Self(provider, model);
     let trigger = viewModel.operationErrorTrigger();
-    var nullables: undefined[] = [];
-    var displayCount = 0;
+    let nullables: undefined[] = [];
+    let displayCount = 0;
 
     let displayable: ErrorDisplay.Displayable.Type = {
       viewModel,
@@ -112,18 +115,18 @@ describe('Error view model should be implemented correctly', () => {
   };
 
   it('Dispatch error view model should work correctly', done => {
-    testErrorViewModel(dispatchVM, done);
+    testErrorViewModel(dispatchProvider, dispatchModel, done);
   }, timeout);
 
   it('Rx error view model should work correctly', done => {
-    testErrorViewModel(rxVM, done);
+    testErrorViewModel(rxProvider, rxModel, done);
   }, timeout);
 
   it('Dispatch displayable should be implemented correctly', done => {
-    testErrorDisplayable(dispatchVM, done);
+    testErrorDisplayable(dispatchProvider, dispatchModel, done);
   }, timeout);
 
   it('Rx displayable should be implemented correctly', done => {
-    testErrorDisplayable(rxVM, done);
+    testErrorDisplayable(rxProvider, rxModel, done);
   }, timeout);
 });

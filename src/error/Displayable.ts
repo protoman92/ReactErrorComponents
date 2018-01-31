@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs';
-import { Base } from './dependency';
+import * as Base from './base';
 
 /**
  * Displayable interface that can display errors. The top app component should
@@ -19,11 +19,10 @@ export interface Type {
 export let setupBindings = (displayable: Type): void => {
   let viewModel = displayable.viewModel;
   let subscription = displayable.subscription;
-  
+
   /// Immediately delete the error from global state once it is displayed,
   /// otherwise the error will be displayed whenever the state changes.
-  viewModel
-    .operationErrorStream()
+  viewModel.operationErrorStream()
     .mapNonNilOrEmpty(v => v)
     .doOnNext(v => displayable.displayErrorMessage(v))
     .map(() => undefined)
