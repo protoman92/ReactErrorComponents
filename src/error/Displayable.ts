@@ -6,8 +6,8 @@ import * as Base from './base';
  * implement this to handle error displaying.
  */
 export interface Type {
-  viewModel: Readonly<Base.ViewModel.Type>;
-  subscription: Subscription;
+  readonly viewModel: Readonly<Base.ViewModel.Type>;
+  readonly subscription: Subscription;
   displayErrorMessage(error: Error): void;
 }
 

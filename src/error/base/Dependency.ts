@@ -9,14 +9,14 @@ export namespace Action {
    * Base action for error display view model.
    */
   export interface Type {
-    fullErrorValuePath: Readonly<string>;
+    readonly fullErrorValuePath: Readonly<string>;
   }
 
   /**
    * Provide action for an error display view model.
    */
   export interface ProviderType {
-    error: Type;
+    readonly error: Type;
   }
 }
 
@@ -25,14 +25,14 @@ export namespace Constants {
    * Constants for error display component.
    */
   export interface Type {
-    displayDuration: number;
+    readonly displayDuration: number;
   }
 
   /**
    * Provide constants for error display.
    */
   export interface ProviderType {
-    error: Type;
+    readonly error: Type;
   }
 }
 
@@ -43,8 +43,8 @@ export namespace Provider {
    * @extends {ReduxStore.Provider.Type} Store provider extension.
    */
   export interface Type extends ReduxStore.Provider.Type {
-    action: Action.ProviderType;
-    constants: Constants.ProviderType;
+    readonly action: Action.ProviderType;
+    readonly constants: Constants.ProviderType;
   }
 }
 
@@ -133,7 +133,7 @@ export namespace Model {
     }
 
     public errorForState = (state: Readonly<Nullable<StateType<any>>>): Try<Error> => {
-      let path = this.fullErrorValuePath;
+      let path = this.errorValuePath;
 
       return Try.unwrap(state)
         .map(v => S.fromKeyValue(v))
@@ -220,7 +220,7 @@ export namespace ViewModel {
     public initialize = (): void => {};
     public deinitialize = (): void => {};
 
-    public stateStream = (): Observable<Try<S.Self<any>>> => {
+    public stateStream = (): Observable<Try<S.Type<any>>> => {
       let provider = this.provider;
       let store = provider.store;
       let substatePath = this.model.substatePath;
@@ -235,7 +235,7 @@ export namespace ViewModel {
       return this.model.operationErrorStream();
     }
 
-    public errorForState = (state: Readonly<Nullable<S.Self<any>>>): Try<Error> => {
+    public errorForState = (state: Readonly<Nullable<S.Type<any>>>): Try<Error> => {
       return this.model.errorForState(state);
     }
   }

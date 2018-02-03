@@ -27,7 +27,7 @@ export namespace Identity {
    * Provide identity for error display component.
    */
   export interface ProviderType {
-    error?: SelectorType;
+    readonly error?: SelectorType;
   }
 
   /**
@@ -42,7 +42,7 @@ export namespace Identity {
           className: 'error-display-container display-container',
         });
       },
-    
+
       identity: (enabled: boolean): Try<Type> => {
         let common = 'error-display';
 

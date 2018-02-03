@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs';
 import * as React from 'react';
 import { Component, ReactNode } from 'react';
 import { Try } from 'javascriptutilities';
-import { StateType } from 'type-safe-state-js';
+import { State as S, StateType } from 'type-safe-state-js';
 import * as Base from './../base';
 import { Identity } from './Dependency';
 
@@ -11,8 +11,8 @@ export namespace Props {
    * Props type for error display component.
    */
   export interface Type {
-    identityProvider?: Identity.ProviderType;
-    viewModel: Base.ViewModel.DisplayType;
+    readonly identityProvider?: Identity.ProviderType;
+    readonly viewModel: Base.ViewModel.DisplayType;
 
     /**
      * If we do not want to default error display component, we can manually
@@ -66,7 +66,8 @@ export class Self extends Component<Props.Type, StateType<any>> {
   public render(): JSX.Element {
     let props = this.props;
     let viewModel = this.viewModel;
-    let error = viewModel.errorForState(this.state);
+    let state = S.fromKeyValue(this.state);
+    let error = viewModel.errorForState(state);
     let enabled = error.isSuccess();
 
     let identity = Try.unwrap(props.identityProvider)

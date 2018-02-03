@@ -27,7 +27,7 @@ export namespace Action {
    * }
    */
   export interface ProviderType {
-    error: Type;
+    readonly error: Type;
   }
 
   /**
@@ -70,7 +70,7 @@ export namespace Provider {
    * @extends {Base.Provider.Type} Base provider extension.
    */
   export interface Type extends Base.Provider.Type {
-    action: Action.ProviderType;
+    readonly action: Action.ProviderType;
   }
 }
 
@@ -106,7 +106,7 @@ export namespace Model {
       return this.baseModel.operationErrorStream();
     }
 
-    public errorForState = (state: Readonly<Nullable<S.Self<any>>>): Try<Error> => {
+    public errorForState = (state: Readonly<Nullable<S.Type<any>>>): Try<Error> => {
       return this.baseModel.errorForState(state);
     }
   }

@@ -19,7 +19,7 @@ export namespace Action {
    * Provide the action creator error namespace.
    */
   export interface ProviderType {
-    error: CreatorType;
+    readonly error: CreatorType;
   }
 
   /**
@@ -57,7 +57,7 @@ export namespace Reducer {
    * @returns {DispatchReducer<any>} A DispatchReducer instance.
    */
   export let createDefault = (): DispatchReducer<any> => {
-    return (state: S.Self<any>, action: Store.Dispatch.Action.Type<any>) => {
+    return (state: S.Type<any>, action: Store.Dispatch.Action.Type<any>) => {
       switch (action.id) {
         case Action.UPDATE_ERROR_ACTION:
           return state.updatingValue(action.fullValuePath, action.payload);
@@ -75,8 +75,8 @@ export namespace Provider {
    * @extends {Base.Provider.Type} Base provider extension.
    */
   export interface Type extends Base.Provider.Type {
-    action: Action.ProviderType;
-    store: Store.Dispatch.Type;
+    readonly action: Action.ProviderType;
+    readonly store: Store.Dispatch.Type;
   }
 }
 
@@ -113,7 +113,7 @@ export namespace Model {
       return this.baseModel.operationErrorStream();
     }
 
-    public errorForState = (state: Readonly<Nullable<S.Self<any>>>): Try<Error> => {
+    public errorForState = (state: Readonly<Nullable<S.Type<any>>>): Try<Error> => {
       return this.baseModel.errorForState(state);
     }
   }
